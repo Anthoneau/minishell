@@ -16,6 +16,10 @@ UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
     READLINE_FLAGS = $(shell pkg-config --cflags readline)
     READLINE_LIBS = $(shell pkg-config --libs readline)
+else ifeq ($(UNAME), Darwin)
+    READLINE_DIR := $(shell brew --prefix readline 2>/dev/null)
+    READLINE_FLAGS = -I$(READLINE_DIR)/include
+    READLINE_LIBS = -L$(READLINE_DIR)/lib -lreadline
 else
     READLINE_FLAGS =
     READLINE_LIBS = -lreadline
@@ -37,7 +41,7 @@ C_FLAGS			=	-g -Wall -Werror -Wextra -I${INCLUDES}
 LIBFT			=	libft.a
 RM				=	rm -rf
 MAKEFLAGS		+=	--no-print-directory
-C_FLAGS			+=	${READLINE_FLAG}
+C_FLAGS			+=	${READLINE_FLAGS}
 LDFLAGS			+=	${READLINE_LIBS}
 
 #COLORS
